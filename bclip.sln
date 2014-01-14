@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bclip", "bclip\bclip.csproj", "{6C869E6D-21F9-4A3E-8B3F-219A1252B998}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6C869E6D-21F9-4A3E-8B3F-219A1252B998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C869E6D-21F9-4A3E-8B3F-219A1252B998}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C869E6D-21F9-4A3E-8B3F-219A1252B998}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C869E6D-21F9-4A3E-8B3F-219A1252B998}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
