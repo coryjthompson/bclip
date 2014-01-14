@@ -1,4 +1,4 @@
 bclip
 =====
 
-A lightweight clipboard manager.
+A lightweight clipboard manager. Currently Unusable. 
