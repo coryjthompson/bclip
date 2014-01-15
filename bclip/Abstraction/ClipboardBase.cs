@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
-using Pasteboard.Model;
+using bclip.Model;
 
-namespace Pasteboard
+namespace bclip
 {
     delegate void OnCopyDetectedDelegate(CopyItem copyItem);
     delegate void OnPasteDetectedDelegate();

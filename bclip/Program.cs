@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Pasteboard
+namespace bclip
 {
     static class Program
     {
@@ -14,9 +14,18 @@ namespace Pasteboard
         [STAThread]
         static void Main()
         {
+       
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            using (SystemTrayIcon systemTrayIcon = new SystemTrayIcon())
+            {
+                systemTrayIcon.Display();
+                MainController mainController = new MainController();
+                mainController.setSystemTrayIcon(systemTrayIcon);
+                Application.Run();
+            }
+            
         }
     }
 }

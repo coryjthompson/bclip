@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Pasteboard.Model;
+using bclip.Model;
 
-namespace Pasteboard.Abstraction
+namespace bclip.Abstraction
 {
     class WindowsClipboard:ClipboardBase
     {

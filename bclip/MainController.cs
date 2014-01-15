@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Pasteboard.Abstraction;
-using Pasteboard.Model;
+using bclip.Abstraction;
+using bclip.Model;
 
-namespace Pasteboard
+namespace bclip
 {
     class MainController
     {
@@ -24,6 +24,8 @@ namespace Pasteboard
         private bool isClipboardLocked;
 
         private int pasteCount = 0;
+
+        private SystemTrayIcon systemTrayIcon;
 
         public MainController()
         {
@@ -63,6 +65,12 @@ namespace Pasteboard
             }
 
             CopyHistory.Insert(0, copyItem);
+            systemTrayIcon.PopulateCopyItemMenu(CopyHistory);
+        }
+
+        public void setSystemTrayIcon(SystemTrayIcon systemTrayIcon)
+        {
+            this.systemTrayIcon = systemTrayIcon;
         }
 
         public void OnPasteDetected()
