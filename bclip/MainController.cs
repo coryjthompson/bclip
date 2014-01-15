@@ -29,7 +29,7 @@ namespace bclip
 
         public MainController()
         {
-            string operatingSystem = this.DetectOperatingSystem();
+            string operatingSystem = DetectOperatingSystem();
             
             if (operatingSystem == OS_WINDOWS)
                 this.ClipboardHandler = new WindowsClipboard();
@@ -54,16 +54,6 @@ namespace bclip
                 return;
             }
 
-            if (pasteCount > CopyHistory.Count - 1)
-            {
-                pasteCount = 0;
-            }
-            
-            if (CopyHistory.Count > 0 && copyItem.Content == CopyHistory[pasteCount].Content)
-            {
-                return;
-            }
-
             CopyHistory.Insert(0, copyItem);
             systemTrayIcon.PopulateCopyItemMenu(CopyHistory);
         }
@@ -77,10 +67,7 @@ namespace bclip
         {
             long elapsedMilliseconds = _stopwatch.ElapsedMilliseconds;
             
-            if (elapsedMilliseconds < 100)
-                return;
-
-            if (elapsedMilliseconds < 500)
+            if (elapsedMilliseconds < 2000)
             {
                 pasteCount++;
 
@@ -93,7 +80,9 @@ namespace bclip
                         SendKeys.Send("{BACKSPACE}");
                     }
                 }
-                if (pasteCount > CopyHistory.Count - 1)
+
+                //loop around if reached limit
+                if (pasteCount > CopyHistory.Count)
                 {
                     pasteCount = 0;
                 }
