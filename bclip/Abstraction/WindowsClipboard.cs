@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Windows;
 using bclip.Model;
 
 namespace bclip.Abstraction
@@ -18,9 +15,7 @@ namespace bclip.Abstraction
 
  
         #endregion
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern Int32 GetForegroundWindow();
-
+     
         [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
 
@@ -41,7 +36,33 @@ namespace bclip.Abstraction
         
         [DllImport("User32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern int CallNextHookEx(int idHook, int nCode, IntPtr wParam, IntPtr lParam);
-     
+        
+        [DllImport("user32.dll")]
+        static extern bool GetGUIThreadInfo(uint idThread, ref GuiThreadInfo lpgui);
+
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int iLeft;
+            public int iTop;
+            public int iRight;
+            public int iBottom;
+        }
+        [StructLayout(LayoutKind.Sequential)]
+        public struct GuiThreadInfo
+        {
+            public int cbSize;
+            public int flags;
+            public IntPtr hwndActive;
+            public IntPtr hwndFocus;
+            public IntPtr hwndCapture;
+            public IntPtr hwndMenuOwner;
+            public IntPtr hwndMoveSize;
+            public IntPtr hwndCaret;
+            public RECT rectCaret;
+        }
+
         IntPtr nextClipboardViewer;
 
         public WindowsClipboard()
@@ -52,16 +73,17 @@ namespace bclip.Abstraction
         }
         private void SendPaste()
         {
-            UnregisterHotKey((IntPtr)this.Handle, 1);
-            //SendKeys.SendWait("^v");
-            RegisterHotKey((IntPtr)this.Handle, 1, MOD_CONTROL, KEY_V);
-
-
+            IntPtr hWnd = GetFocusedHandle();
+            PostMessage(hWnd, WM_PASTE, IntPtr.Zero, IntPtr.Zero);
         }
 
         public static IntPtr GetFocusedHandle()
         {
-            return (IntPtr)GetForegroundWindow();
+            var info = new GuiThreadInfo();
+            info.cbSize = Marshal.SizeOf(info);
+            if (!GetGUIThreadInfo(0, ref info))
+                throw new Win32Exception();
+            return info.hwndFocus;
         }
 
 

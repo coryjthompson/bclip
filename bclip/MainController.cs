@@ -48,7 +48,7 @@ namespace bclip
 
         public void OnCopyDetected(CopyItem copyItem)
         {
-            if (isClipboardLocked)
+            if (isClipboardLocked || CopyHistory[pasteCount].Content == copyItem.Content && CopyHistory.Count > 1)
             {
                 isClipboardLocked = false;
                 return;
@@ -71,16 +71,7 @@ namespace bclip
             {
                 pasteCount++;
 
-                if (pasteCount > 1)
-                {
-                    int backspaceLength = CopyHistory[pasteCount - 1].Content.Length;
-
-                    for (int i = 0; i < backspaceLength; i++)
-                    {
-                        SendKeys.Send("{BACKSPACE}");
-                    }
-                }
-
+     
                 //loop around if reached limit
                 if (pasteCount > CopyHistory.Count)
                 {
