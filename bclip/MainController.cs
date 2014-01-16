@@ -21,7 +21,7 @@ namespace bclip
         private Stopwatch _stopwatch;
         private string _operatingSystem;
 
-        private bool isClipboardLocked;
+        private CopyItem lastPaste;
 
         private int pasteCount = 0;
 
@@ -43,14 +43,14 @@ namespace bclip
             this._stopwatch = new Stopwatch();
             this._stopwatch.Start();
 
-            this.isClipboardLocked = false;
+            lastPaste = null;
         }
 
         public void OnCopyDetected(CopyItem copyItem)
         {
-            if (isClipboardLocked || CopyHistory[pasteCount].Content == copyItem.Content && CopyHistory.Count > 1)
+            if (lastPaste != null && lastPaste.Content == copyItem.Content)
             {
-                isClipboardLocked = false;
+                //lastPaste = null;
                 return;
             }
 
@@ -82,7 +82,7 @@ namespace bclip
                 pasteCount = 0;
             }
 
-            isClipboardLocked = true;
+            lastPaste = CopyHistory[pasteCount];
             Clipboard.SetText(CopyHistory[pasteCount].Content);
             
             _stopwatch.Restart();
