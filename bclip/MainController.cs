@@ -67,8 +67,9 @@ namespace bclip
         {
             long elapsedMilliseconds = _stopwatch.ElapsedMilliseconds;
             
-            if (elapsedMilliseconds < 2000)
+            if (elapsedMilliseconds < 1000)
             {
+               
                 pasteCount++;
 
      
@@ -83,7 +84,6 @@ namespace bclip
             }
 
             lastPaste = CopyHistory[pasteCount];
-            Clipboard.SetText(CopyHistory[pasteCount].Content);
             
             _stopwatch.Restart();
             _stopwatch.Start();

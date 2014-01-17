@@ -44,6 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstraction\User32Wrapper.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Abstraction\WindowsClipboard.cs">
       <SubType>Form</SubType>
     </Compile>
