@@ -7,32 +7,23 @@ namespace bclip.Abstraction
 {
     internal sealed class User32Wrapper:Form
     {
+        #region Constants 
+        /*defined in winuser.h*/
+        //get/set text of an element
         private const int WM_GETTEXT = 0x0D;
         private const int WM_SETTEXT = 0x000c;
-     
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+
+        //clipboard related
+        private const int WM_DRAWCLIPBOARD = 0x308;
+        private const int WM_CHANGECBCHAIN = 0x030D;
+
+        //hotkey related
+        private const int WM_HOTKEY = 0x312;
+        #endregion Constants
+
+        #region External Functions
+        [DllImport("User32.dll", CharSet = CharSet.Auto)]
         private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
-
-        public struct RECT
-        {
-            public uint left;
-            public uint top;
-            public uint right;
-            public uint bottom;
-        }
-
-        public struct GuiThreadInfo
-        {
-            public int cbSize;
-            public uint flags;
-            public IntPtr hwndActive;
-            public IntPtr hwndFocus;
-            public IntPtr hwndCapture;
-            public IntPtr hwndMenuOwner;
-            public IntPtr hwndMoveSize;
-            public IntPtr hwndCapred;
-            public RECT rcCaret;
-        };
 
         [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
@@ -51,8 +42,11 @@ namespace bclip.Abstraction
 
         [DllImport("user32.dll")]
         public static extern IntPtr PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        #endregion External Functions
 
+        #region EventHandlers
         private EventHandler OnHotKeyPressed;
+        #endregion EventHandlers
 
         private static GuiThreadInfo GetThreadInfo(int tid)
         {
@@ -105,11 +99,6 @@ namespace bclip.Abstraction
 
         protected override void WndProc(ref System.Windows.Forms.Message m)
         {
-            // defined in winuser.h
-            const int WM_DRAWCLIPBOARD = 0x308;
-            const int WM_CHANGECBCHAIN = 0x030D;
-            const int WM_HOTKEY = 0x312;
-
             switch (m.Msg)
             {
 
@@ -134,4 +123,27 @@ namespace bclip.Abstraction
         }
 
     }
+
+    #region DataStructures
+    public struct RECT
+    {
+        public uint left;
+        public uint top;
+        public uint right;
+        public uint bottom;
+    }
+
+    public struct GuiThreadInfo
+    {
+        public int cbSize;
+        public uint flags;
+        public IntPtr hwndActive;
+        public IntPtr hwndFocus;
+        public IntPtr hwndCapture;
+        public IntPtr hwndMenuOwner;
+        public IntPtr hwndMoveSize;
+        public IntPtr hwndCapred;
+        public RECT rcCaret;
+    };
+#endregion DataStructures
 }
