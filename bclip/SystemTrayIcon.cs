@@ -9,32 +9,32 @@ namespace bclip
 {
     class SystemTrayIcon : IDisposable
     {
-        private NotifyIcon notifyIcon;
-        private ContextMenu copyItemMenu;
-        private ContextMenu systemMenu;
+        private readonly NotifyIcon _notifyIcon;
+        
+        private ContextMenu _copyItemMenu;
+        private ContextMenu _systemMenu;
 
         public SystemTrayIcon()
         {
-            notifyIcon = new NotifyIcon();
+            _notifyIcon = new NotifyIcon();
         }
 
         public void Display()
         {
-            notifyIcon.MouseDown += new MouseEventHandler(MouseDown);
-            notifyIcon.Icon = new Icon("icon.ico");
-            notifyIcon.Text = "System Tray Utility Application Demonstration Program";
-            notifyIcon.Visible = true;
+            _notifyIcon.MouseDown += new MouseEventHandler(MouseDown);
+            _notifyIcon.Icon = new Icon("icon.ico");
+            _notifyIcon.Visible = true;
 
-            CreateSystemMenu();
+            Create_systemMenu();
             PopulateCopyItemMenu(null);
 
-            copyItemMenu = new ContextMenu();
-            notifyIcon.ContextMenu = systemMenu;
+            _copyItemMenu = new ContextMenu();
+            _notifyIcon.ContextMenu = _systemMenu;
         }
 
         public void Dispose()
         {
-            notifyIcon.Dispose();
+            _notifyIcon.Dispose();
         }
 
         public void PopulateCopyItemMenu(List<CopyItem> copyItems)
@@ -42,9 +42,9 @@ namespace bclip
             if (copyItems == null || copyItems.Count <= 0)
                 return;
 
-            copyItemMenu.MenuItems.Clear();
+            _copyItemMenu.MenuItems.Clear();
             foreach(CopyItem copyItem in copyItems){
-                copyItemMenu.MenuItems.Add(copyItem.Content);
+                _copyItemMenu.MenuItems.Add(copyItem.Content);
             }
 
         }
@@ -53,9 +53,9 @@ namespace bclip
         {
             if (e.Button == MouseButtons.Left)
             {
-                notifyIcon.ContextMenu = copyItemMenu;
-                ShowContextMenu(notifyIcon);
-                notifyIcon.ContextMenu = systemMenu;
+                _notifyIcon.ContextMenu = _copyItemMenu;
+                ShowContextMenu(_notifyIcon);
+                _notifyIcon.ContextMenu = _systemMenu;
             }
         }
 
@@ -65,9 +65,9 @@ namespace bclip
             methodInfo.Invoke(notifyIcon, null);
         }
 
-        private void CreateSystemMenu()
+        private void Create_systemMenu()
         {
-            systemMenu = new ContextMenu();
+            _systemMenu = new ContextMenu();
 
             MenuItem exitMenuItem = new MenuItem("Exit");
             exitMenuItem.Click += new EventHandler(OnExitClick);
@@ -83,11 +83,11 @@ namespace bclip
             plainTextMenuItem.Checked = true;
             plainTextMenuItem.Click += new EventHandler(OnPlainTextClick);
 
-            systemMenu.MenuItems.Add(launchOnStartupMenuItem);
-            systemMenu.MenuItems.Add(plainTextMenuItem);
-            systemMenu.MenuItems.Add("-");
-            systemMenu.MenuItems.Add(aboutMenuItem);
-            systemMenu.MenuItems.Add(exitMenuItem);
+            _systemMenu.MenuItems.Add(launchOnStartupMenuItem);
+            _systemMenu.MenuItems.Add(plainTextMenuItem);
+            _systemMenu.MenuItems.Add("-");
+            _systemMenu.MenuItems.Add(aboutMenuItem);
+            _systemMenu.MenuItems.Add(exitMenuItem);
 
         }
 
@@ -103,13 +103,13 @@ namespace bclip
 
         private void OnPlainTextClick(object sender, EventArgs e)
         {
-            MenuItem menuItem = systemMenu.MenuItems[1];
+            MenuItem menuItem = _systemMenu.MenuItems[1];
             menuItem.Checked = !menuItem.Checked;
         }
 
         private void OnLaunchOnStartupClick(object sender, EventArgs e)
         {
-            MenuItem menuItem = systemMenu.MenuItems[0];
+            MenuItem menuItem = _systemMenu.MenuItems[0];
             menuItem.Checked = !menuItem.Checked;
         }
     }
