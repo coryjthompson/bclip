@@ -44,15 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstraction\User32Wrapper.cs">
+    <Compile Include="Windows\User32Wrapper.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Abstraction\WindowsClipboard.cs">
+    <Compile Include="Windows\WindowsClipboard.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainController.cs" />
     <Compile Include="Model\CopyItem.cs" />
-    <Compile Include="Abstraction\ClipboardBase.cs">
+    <Compile Include="ClipboardBase.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program.cs" />

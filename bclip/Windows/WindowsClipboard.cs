@@ -4,19 +4,16 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Forms;
 using bclip.Model;
-using bclip.Abstraction;
+using bclip.Windows;
 
-namespace bclip.Abstraction
+namespace bclip.Windows
+ 
 {
     class WindowsClipboard:ClipboardBase
     {
         #region fields
         public static int KEY_V = 0x0056;
         public static int MOD_CONTROL = 0x0002;
-        const int WM_PASTE = 0x302;
-        const int WM_UNDO = 0x0304;
-
- 
         #endregion
      
         
@@ -37,7 +34,7 @@ namespace bclip.Abstraction
         public static extern int CallNextHookEx(int idHook, int nCode, IntPtr wParam, IntPtr lParam);
         
         [DllImport("user32.dll")]
-        static extern bool GetGUIThreadInfo(uint idThread, ref User32Wrapper.GuiThreadInfo lpgui);
+        static extern bool GetGUIThreadInfo(uint idThread, ref User32Wrapper lpgui);
         IntPtr nextClipboardViewer;
         private User32Wrapper.GuiThreadInfo guiInfo;
 

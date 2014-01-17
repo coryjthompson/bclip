@@ -3,11 +3,12 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
-namespace bclip.Abstraction
+namespace bclip.Windows
 {
-    internal sealed class User32Wrapper:Form
+    internal sealed class User32Wrapper : Form
     {
         #region Constants 
+
         /*defined in winuser.h*/
         //get/set text of an element
         private const int WM_GETTEXT = 0x0D;
@@ -19,9 +20,11 @@ namespace bclip.Abstraction
 
         //hotkey related
         private const int WM_HOTKEY = 0x312;
+
         #endregion Constants
 
         #region External Functions
+
         [DllImport("User32.dll", CharSet = CharSet.Auto)]
         private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
@@ -42,10 +45,13 @@ namespace bclip.Abstraction
 
         [DllImport("user32.dll")]
         public static extern IntPtr PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
         #endregion External Functions
 
         #region EventHandlers
+
         private EventHandler OnHotKeyPressed;
+
         #endregion EventHandlers
 
         private static GuiThreadInfo GetThreadInfo(int tid)
@@ -75,7 +81,7 @@ namespace bclip.Abstraction
         public static string GetText()
         {
             IntPtr focusedHandle = FocusedHandle();
-            System.Text.StringBuilder sb = new System.Text.StringBuilder(255);  // or length from call with GETTEXTLENGTH
+            System.Text.StringBuilder sb = new System.Text.StringBuilder(255); // or length from call with GETTEXTLENGTH
 
             SendMessage(focusedHandle, WM_GETTEXT, sb.Capacity, sb);
             return sb.ToString();
@@ -113,37 +119,38 @@ namespace bclip.Abstraction
             }
         }
 
-        public void RegisterHotKey(int id,  int modifiers, int keys, EventHandler onHotKeyPressed)
+        public void RegisterHotKey(int id, int modifiers, int keys, EventHandler onHotKeyPressed)
         {
-            if(OnHotKeyPressed != null)
+            if (OnHotKeyPressed != null)
                 throw new NotImplementedException("Currently unable to register multiple hot keys");
 
             OnHotKeyPressed = onHotKeyPressed;
             RegisterHotKey(this.Handle, id, modifiers, keys);
         }
 
-    }
+        #region DataStructures
 
-    #region DataStructures
-    public struct RECT
-    {
-        public uint left;
-        public uint top;
-        public uint right;
-        public uint bottom;
-    }
+        public struct RECT
+        {
+            public uint left;
+            public uint top;
+            public uint right;
+            public uint bottom;
+        }
 
-    public struct GuiThreadInfo
-    {
-        public int cbSize;
-        public uint flags;
-        public IntPtr hwndActive;
-        public IntPtr hwndFocus;
-        public IntPtr hwndCapture;
-        public IntPtr hwndMenuOwner;
-        public IntPtr hwndMoveSize;
-        public IntPtr hwndCapred;
-        public RECT rcCaret;
-    };
-#endregion DataStructures
+        public struct GuiThreadInfo
+        {
+            public int cbSize;
+            public uint flags;
+            public IntPtr hwndActive;
+            public IntPtr hwndFocus;
+            public IntPtr hwndCapture;
+            public IntPtr hwndMenuOwner;
+            public IntPtr hwndMoveSize;
+            public IntPtr hwndCapred;
+            public RECT rcCaret;
+        };
+
+        #endregion DataStructures
+    }
 }
