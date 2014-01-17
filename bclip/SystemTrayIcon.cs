@@ -23,6 +23,7 @@ namespace bclip
         {
             _notifyIcon.MouseDown += new MouseEventHandler(MouseDown);
             _notifyIcon.Icon = new Icon("icon.ico");
+            _notifyIcon.Text = "BClip Clipboard Manager";
             _notifyIcon.Visible = true;
 
             Create_systemMenu();
