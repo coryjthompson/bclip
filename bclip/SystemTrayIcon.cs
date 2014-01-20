@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using bclip.Model;
+using Pasteboard.Properties;
 
 namespace bclip
 {
@@ -23,7 +24,7 @@ namespace bclip
         {
             _notifyIcon.MouseDown += new MouseEventHandler(MouseDown);
             _notifyIcon.Icon = new Icon("icon.ico");
-            _notifyIcon.Text = "BClip Clipboard Manager";
+            _notifyIcon.Text = Resources.SystemTrayIcon_Display;
             _notifyIcon.Visible = true;
 
             Create_systemMenu();
@@ -71,18 +72,18 @@ namespace bclip
             _systemMenu = new ContextMenu();
 
             MenuItem exitMenuItem = new MenuItem("Exit");
-            exitMenuItem.Click += new EventHandler(OnExitClick);
+            exitMenuItem.Click += OnExitClick;
 
-            MenuItem aboutMenuItem = new MenuItem("About");
-            aboutMenuItem.Click += new EventHandler(OnAboutClick);
+            MenuItem aboutMenuItem = new MenuItem(Resources.SystemTrayIcon_OnAboutClick);
+            aboutMenuItem.Click += OnAboutClick;
 
             MenuItem launchOnStartupMenuItem = new MenuItem("Launch on startup");
             launchOnStartupMenuItem.Checked = true;
-            launchOnStartupMenuItem.Click += new EventHandler(OnLaunchOnStartupClick);
+            launchOnStartupMenuItem.Click += OnLaunchOnStartupClick;
 
             MenuItem plainTextMenuItem = new MenuItem("Convert to Plain Text");
             plainTextMenuItem.Checked = true;
-            plainTextMenuItem.Click += new EventHandler(OnPlainTextClick);
+            plainTextMenuItem.Click += OnPlainTextClick;
 
             _systemMenu.MenuItems.Add(launchOnStartupMenuItem);
             _systemMenu.MenuItems.Add(plainTextMenuItem);
@@ -99,7 +100,7 @@ namespace bclip
 
         private void OnAboutClick(object sender, EventArgs e)
         {
-            MessageBox.Show("About");
+            MessageBox.Show(Resources.SystemTrayIcon_OnAboutClick);
         }
 
         private void OnPlainTextClick(object sender, EventArgs e)
