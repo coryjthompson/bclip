@@ -22,7 +22,7 @@ namespace bclip
             {
                 systemTrayIcon.Display();
                 MainController mainController = new MainController();
-                mainController.setSystemTrayIcon(systemTrayIcon);
+                mainController.SetSystemTrayIcon(systemTrayIcon);
                 Application.Run();
             }
             

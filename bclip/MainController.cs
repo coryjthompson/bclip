@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using bclip.Model;
 using bclip.Windows;
@@ -18,14 +15,14 @@ namespace bclip
         public ClipboardBase ClipboardHandler;
         public List<CopyItem> CopyHistory;
 
-        private Stopwatch _stopwatch;
+        private readonly Stopwatch _stopwatch;
         private string _operatingSystem;
 
         private CopyItem lastPaste;
 
         private int pasteCount = 0;
 
-        private SystemTrayIcon systemTrayIcon;
+        private SystemTrayIcon SystemTrayIcon;
 
         public MainController()
         {
@@ -55,12 +52,12 @@ namespace bclip
             }
 
             CopyHistory.Insert(0, copyItem);
-            systemTrayIcon.PopulateCopyItemMenu(CopyHistory);
+            SystemTrayIcon.PopulateCopyItemMenu(CopyHistory);
         }
 
-        public void setSystemTrayIcon(SystemTrayIcon systemTrayIcon)
+        public void SetSystemTrayIcon(SystemTrayIcon systemTrayIcon)
         {
-            this.systemTrayIcon = systemTrayIcon;
+            this.SystemTrayIcon = systemTrayIcon;
         }
 
         public void OnPasteDetected()
@@ -72,6 +69,7 @@ namespace bclip
                
                 pasteCount++;
 
+                WindowsClipboard.SendUndo();
      
                 //loop around if reached limit
                 if (pasteCount > CopyHistory.Count)
@@ -84,6 +82,7 @@ namespace bclip
             }
 
             lastPaste = CopyHistory[pasteCount];
+            Clipboard.SetText(CopyHistory[pasteCount].Content);
             
             _stopwatch.Restart();
             _stopwatch.Start();

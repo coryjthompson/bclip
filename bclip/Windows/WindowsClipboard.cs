@@ -1,7 +1,6 @@
 ﻿using System;
 using bclip.Model;
 
-
 namespace bclip.Windows
  
 {
@@ -19,9 +18,15 @@ namespace bclip.Windows
             user32Wrapper.RegisterClipboard(OnDrawClipboard);
         }
 
+        public static void SendUndo()
+        {
+            User32Wrapper.SendUndo();
+        }
+
         public void OnHotKeyPressed(object sender, EventArgs e)
         {
             OnPasteDetected();
+            User32Wrapper.SendPaste();
         }
 
         public void OnDrawClipboard(object sender, EventArgs e)

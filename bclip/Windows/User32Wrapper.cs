@@ -18,6 +18,10 @@ namespace bclip.Windows
         //hotkey related
         private const int WM_HOTKEY = 0x312;
 
+        //paste & undo
+        private const int WM_PASTE = 0x302;
+        private const int WM_UNDO = 0x0304;
+
         #endregion Constants
 
         #region External Functions
@@ -33,13 +37,13 @@ namespace bclip.Windows
         private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
         [DllImport("user32.dll")]
+        static extern bool GetGUIThreadInfo(uint idThread, ref GuiThreadInfo lpgui);
+
+        [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
 
         [DllImport("user32.dll")]
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
-
-        [DllImport("user32.dll", EntryPoint = "GetGUIThreadInfo")]
-        private static extern bool GetGUIThreadInfo(int tId, out GuiThreadInfo threadInfo);
 
         [DllImport("User32.dll", CharSet = CharSet.Auto)]
         public static extern int SendMessage(IntPtr hwnd, int wMsg, int wParam, StringBuilder lParam);
@@ -70,14 +74,6 @@ namespace bclip.Windows
             _nextClipboardViewer = (IntPtr) SetClipboardViewer((int) Handle);
         }
 
-        private static GuiThreadInfo GetThreadInfo(int tid)
-        {
-            var tinfo = new GuiThreadInfo();
-            tinfo.cbSize = Marshal.SizeOf(tinfo);
-            GetGUIThreadInfo(tid, out tinfo);
-            return tinfo;
-        }
-
         /*
         public static string FocusedClassName()
         {
@@ -88,9 +84,11 @@ namespace bclip.Windows
 
         }*/
 
-        public static IntPtr FocusedHandle()
+        public static IntPtr GetFocusedHandle()
         {
-            GuiThreadInfo info = GetThreadInfo(0);
+            var info = new GuiThreadInfo();
+            info.cbSize = Marshal.SizeOf(info);
+            GetGUIThreadInfo(0, ref info);
             return info.hwndFocus;
         }
 
@@ -128,6 +126,18 @@ namespace bclip.Windows
             }
         }
 
+        public static void SendPaste()
+        {
+            IntPtr hWnd = GetFocusedHandle();
+            PostMessage(hWnd, WM_PASTE, IntPtr.Zero, IntPtr.Zero);
+        }
+
+        public static void SendUndo()
+        {
+            IntPtr hWnd = GetFocusedHandle();
+            PostMessage(hWnd, WM_UNDO, IntPtr.Zero, IntPtr.Zero);
+        }
+
         public void RegisterHotKey(int id, int modifiers, int keys, EventHandler onHotKeyPressed)
         {
             if (_onHotKeyPressed != null)
@@ -139,25 +149,27 @@ namespace bclip.Windows
 
         #region DataStructures
 
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int iLeft;
+            public int iTop;
+            public int iRight;
+            public int iBottom;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
         public struct GuiThreadInfo
         {
             public int cbSize;
-            public uint flags;
+            public int flags;
             public IntPtr hwndActive;
-            public IntPtr hwndCapred;
-            public IntPtr hwndCapture;
             public IntPtr hwndFocus;
+            public IntPtr hwndCapture;
             public IntPtr hwndMenuOwner;
             public IntPtr hwndMoveSize;
-            public RECT rcCaret;
-        };
-
-        public struct RECT
-        {
-            public uint bottom;
-            public uint left;
-            public uint right;
-            public uint top;
+            public IntPtr hwndCaret;
+            public RECT rectCaret;
         }
 
         #endregion DataStructures
