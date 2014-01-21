@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Pasteboard.Properties
+namespace bclip.Properties
 {
 
 

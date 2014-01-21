@@ -7,8 +7,8 @@
     <ProjectGuid>{6C869E6D-21F9-4A3E-8B3F-219A1252B998}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pasteboard</RootNamespace>
-    <AssemblyName>Pasteboard</AssemblyName>
+    <RootNamespace>bclip</RootNamespace>
+    <AssemblyName>bclip</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,7 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Windows\User32Wrapper.cs" />
+    <Compile Include="Windows\User32Wrapper.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Windows\WindowsClipboard.cs" />
     <Compile Include="MainController.cs" />
     <Compile Include="Model\CopyItem.cs" />

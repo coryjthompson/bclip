@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using bclip.Model;
-using Pasteboard.Properties;
+using bclip.Properties;
 
 namespace bclip
 {
