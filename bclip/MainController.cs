@@ -63,26 +63,25 @@ namespace bclip
         public void OnPasteDetected()
         {
             long elapsedMilliseconds = _stopwatch.ElapsedMilliseconds;
-            
+
             if (elapsedMilliseconds < 1000)
             {
-               
                 pasteCount++;
-
                 WindowsClipboard.SendUndo();
      
-                //loop around if reached limit
-                if (pasteCount > CopyHistory.Count)
-                {
-                    pasteCount = 0;
-                }
-
             } else {
                 pasteCount = 0;
             }
 
+            //If no copies have been saved, then do nothing
+            if (CopyHistory.Count == 0)
+                return;
+
+            if (pasteCount >= CopyHistory.Count)
+                pasteCount = 0;
+
             lastPaste = CopyHistory[pasteCount];
-            Clipboard.SetText(CopyHistory[pasteCount].Content);
+            Clipboard.SetText(lastPaste.Content);
             
             _stopwatch.Restart();
             _stopwatch.Start();
