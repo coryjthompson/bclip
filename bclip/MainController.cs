@@ -7,7 +7,7 @@ using bclip.Windows;
 
 namespace bclip
 {
-    class MainController
+    internal class MainController
     {
         private const string OS_WINDOWS = "Windows";
         private const string OS_OSX = "OSX";
@@ -18,46 +18,46 @@ namespace bclip
         private readonly Stopwatch _stopwatch;
         private string _operatingSystem;
 
-        private CopyItem lastPaste;
+        private CopyItem _lastPaste;
 
-        private int pasteCount = 0;
+        private int _pasteCount = 0;
 
-        private SystemTrayIcon SystemTrayIcon;
+        private SystemTrayIcon _systemTrayIcon;
 
         public MainController()
         {
             string operatingSystem = DetectOperatingSystem();
-            
+
             if (operatingSystem == OS_WINDOWS)
-                this.ClipboardHandler = new WindowsClipboard();
+                ClipboardHandler = new WindowsClipboard();
             else
                 throw new NotImplementedException("Unknown Operating System");
 
-            this.ClipboardHandler.OnCopyDetected = this.OnCopyDetected;
-            this.ClipboardHandler.OnPasteDetected = this.OnPasteDetected;
+            ClipboardHandler.OnCopyDetected = OnCopyDetected;
+            ClipboardHandler.OnPasteDetected = OnPasteDetected;
 
-            this.CopyHistory = new List<CopyItem>();
-            this._stopwatch = new Stopwatch();
-            this._stopwatch.Start();
+            CopyHistory = new List<CopyItem>();
+            _stopwatch = new Stopwatch();
+            _stopwatch.Start();
 
-            lastPaste = null;
+            _lastPaste = null;
         }
 
         public void OnCopyDetected(CopyItem copyItem)
         {
-            if (lastPaste != null && lastPaste.Content == copyItem.Content)
+            if (_lastPaste != null && _lastPaste.Content == copyItem.Content)
             {
                 //lastPaste = null;
                 return;
             }
 
             CopyHistory.Insert(0, copyItem);
-            SystemTrayIcon.PopulateCopyItemMenu(CopyHistory);
+            _systemTrayIcon.PopulateCopyItemMenu(CopyHistory);
         }
 
         public void SetSystemTrayIcon(SystemTrayIcon systemTrayIcon)
         {
-            this.SystemTrayIcon = systemTrayIcon;
+            _systemTrayIcon = systemTrayIcon;
         }
 
         public void OnPasteDetected()
@@ -66,30 +66,31 @@ namespace bclip
 
             if (elapsedMilliseconds < 1000)
             {
-                pasteCount++;
+                _pasteCount++;
                 WindowsClipboard.SendUndo();
-     
-            } else {
-                pasteCount = 0;
+            }
+            else
+            {
+                _pasteCount = 0;
             }
 
             //If no copies have been saved, then do nothing
             if (CopyHistory.Count == 0)
                 return;
 
-            if (pasteCount >= CopyHistory.Count)
-                pasteCount = 0;
+            if (_pasteCount >= CopyHistory.Count)
+                _pasteCount = 0;
 
-            lastPaste = CopyHistory[pasteCount];
-            Clipboard.SetText(lastPaste.Content);
-            
+            _lastPaste = CopyHistory[_pasteCount];
+            Clipboard.SetText(_lastPaste.Content);
+
             _stopwatch.Restart();
             _stopwatch.Start();
         }
 
         private string DetectOperatingSystem()
         {
-            return this._operatingSystem ?? (this._operatingSystem = OS_WINDOWS);
+            return _operatingSystem ?? (_operatingSystem = OS_WINDOWS);
         }
     }
 }
