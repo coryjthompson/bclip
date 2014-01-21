@@ -46,11 +46,8 @@ namespace bclip
         public void OnCopyDetected(CopyItem copyItem)
         {
             if (_lastPaste != null && _lastPaste.Content == copyItem.Content)
-            {
-                //lastPaste = null;
                 return;
-            }
-
+            
             CopyHistory.Insert(0, copyItem);
             _systemTrayIcon.PopulateCopyItemMenu(CopyHistory);
         }

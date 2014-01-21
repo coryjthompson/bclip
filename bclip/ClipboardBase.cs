@@ -7,7 +7,7 @@ namespace bclip
     delegate void OnCopyDetectedDelegate(CopyItem copyItem);
     delegate void OnPasteDetectedDelegate();
 
-    abstract class ClipboardBase:Form
+    abstract class ClipboardBase
     {
         public OnCopyDetectedDelegate OnCopyDetected;
         public OnPasteDetectedDelegate OnPasteDetected;

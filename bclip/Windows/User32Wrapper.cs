@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace bclip.Windows
 {
-    internal sealed class User32Wrapper : Form
+    internal sealed class User32Wrapper : Control
     {
         #region Constants 
 
